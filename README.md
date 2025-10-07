@@ -2,6 +2,10 @@
 
 A Swift package for geospatial classification, leveraging **C++ interop**, **ONNX Runtime**, and **Core ML** for flexible model inference.
 
+## Origin and Core Assets
+
+This package was created by decoupling the core machine learning assets (**`GeoClassifier.mlmodelc`**, **`GeoClassifier.onnx`**, and **`GeoClassifierEvaluationData.json`**) and related classification functionality from the original repository, [mi-parkes/geo-coord-classifier](https://github.com/mi-parkes/geo-coord-classifier). This refactoring facilitates a **reusable Swift package** for integrating these models into various applications.
+
 ## Features
 
 * **Swift–C++ Interoperability:** Seamlessly integrates high-performance C++ classification logic for native execution speed.
@@ -20,13 +24,17 @@ A Swift package for geospatial classification, leveraging **C++ interop**, **ONN
 * **Platforms:** macOS 15.0+ and iOS 16.0+  
 * **C++ Standard:** Requires C++23 support (as defined in `Package.swift`)
 
-## Installation
+* **ONNX Runtime:** The core library required for loading and running the ONNX model.
+    * This project requires the **`onnxruntime.xcframework`** directory to be manually created and populated with header files and shared libraries (e.g., `libonnxruntime.1.23.0.dylib`) for **all platforms subject to build** (macOS, iOS, and iOS Simulator), as detailed in the [Building the Project](#building-the-project) section.
+* **Model Files:**
+    * `GeoClassifier.onnx`: The ONNX format of the quantized model.
+    * `GeoClassifier.mlpackage`: The Core ML format of the model.
+* **Evaluation Data:**
+    * `GeoClassifierEvaluationData.json`: The data file used by the application to run automated, sequential evaluation on both the ONNX and Core ML backends.
 
-### Swift Package Manager (Recommended)
+-----
 
-```swift
-.package(url: "https://github.com/mi-parkes/Swift-ONNX-CoreML.git", from: "1.0.0")
-```
+### Building the Project
 
 <p align="center">
 Swift-ONNX-CoreML Package Dependency Graph
@@ -34,4 +42,44 @@ Swift-ONNX-CoreML Package Dependency Graph
 <img src="doc/Swift-ONNX-CoreML.svg" 
     alt="something went wrong" width="90%">
 </p>
+
+The project expects the **`onnxruntime.xcframework`** directory to be located in the root directory of this project and contain the following structure:
+
+```txt
+/geo-coord-classifier
+├── ...
+├── geo-coord-classifier
+├── geo-coord-classifier-cli
+├── geo-coord-classifier.xcodeproj
+├── ...
+├── onnxruntime.xcframework
+│   ├── Info.plist
+│   ├── ios-arm64
+│   │   ├── Headers
+│   │   │   └── onnxruntime
+│   │   └── libonnxruntime.1.23.0.dylib
+│   ├── ios-arm64-simulator
+│   │   ├── Headers
+│   │   │   └── onnxruntime
+│   │   └── libonnxruntime.1.23.0.dylib
+│   └── macos-arm64
+│       ├── Headers
+│       │   └── onnxruntime
+│       └── libonnxruntime.1.23.0.dylib
+└── ...
+```
+#### Building from Command Line 🛠️
+
+```bash
+# Build CLI App for macOS
+make build
+```
+
+## Installation
+
+### Swift Package Manager (Recommended)
+
+```swift
+.package(url: "https://github.com/mi-parkes/Swift-ONNX-CoreML.git", from: "1.0.0")
+```
 
