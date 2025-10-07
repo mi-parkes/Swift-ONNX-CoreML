@@ -1,0 +1,14 @@
+.build
+.swiftpm
+.DS_Store
+DerivedData
+notes
+*.txt
+*.bak
+classifier/.swiftpm
+onnxruntime-release
+onnxruntime.xcframework
+GeneratedSources
+Resources
+geoCoordClassifier.xcodeproj/project.xcworkspace/xcuserdata/
+geoCoordClassifier.xcodeproj/xcuserdata/
